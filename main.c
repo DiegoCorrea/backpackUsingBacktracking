@@ -1,12 +1,12 @@
 # include <stdio.h>
 # define MAX 10000
 
-int capacidade, n, valores[MAX], X[MAX];
+int capacidade, n, valores[MAX], X[MAX], lucroSomando;
 float pesos[MAX];
 int escolhidos[MAX];
 
 void input();
-void knapsack(int );
+int knapsack3(int );
 void output();
 
 int main(){
@@ -50,11 +50,29 @@ void output(){
   printf("Capacidade da mochila: %d\n", capacidade);
 }
 
-void knapsack(int l){
+void knapsack3(int l){
 
+  if((l = n) && (lucroSomando > OptP)){
+    OptP = lucroSomando;
+    //OptX = ;
+  }
+
+  if (l = n){
+    C[l] = 0;
+  } else {
+    if (CurW + pesos[l] < capacidade) {
+      C[l] = 1;      
+    } else {
+      C[l] = 0;
+    }
+  }
+  B = lucroSomando + RKnap();
+  for(;;){
+    if() return;
+  }
 }
 
-void RKnap(){
+int RKnap(){
   int i = 0, j = 0, profit;
   float weight;
 
@@ -74,4 +92,5 @@ void RKnap(){
       i++;
     }
   }
+  return profit;
 }
