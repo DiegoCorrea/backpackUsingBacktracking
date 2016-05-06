@@ -68,8 +68,10 @@ void outputInput(){
     printf("i%d -> V: %d peso:%.1f lucro:%.1f\n", item[i].chave, item[i].valor, item[i].peso, item[i].lucro);
   }
   printf("\n");
+
+  printf("Em Ordem de Lucro\n");
   for (i = 0; i < n; i++){ 
-    printf("i%d\n", emOrdem[i]->chave);
+    printf("i%d %.1f\n", emOrdem[i]->chave, emOrdem[i]->lucro);
   }
   printf("\n");
 }
@@ -158,7 +160,7 @@ int partition(int inicio, int final){
 int randomizedPartition(int inicio, int final){
   int i = (rand() % final + inicio);
   itemType *tmp;
-  
+
   tmp = emOrdem[i];
   emOrdem[i] = emOrdem[inicio];
   emOrdem[inicio] = tmp;
@@ -167,7 +169,7 @@ int randomizedPartition(int inicio, int final){
 void quickSort(int inicio, int final){
   int meio;
   if (inicio < final){
-    meio = randomizedPartition(inicio,final);
+    meio = partition(inicio,final);
     quickSort(inicio,meio - 1);
     quickSort(meio + 1,final);
   }
