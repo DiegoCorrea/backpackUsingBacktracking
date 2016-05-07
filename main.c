@@ -142,24 +142,24 @@ int partition(int inicio, int fim) {
     float pivo;
     itemType *tmp;
 
-    pivo = emOrdem[inicio]->lucro;
+    pivo = emOrdem[fim]->lucro;
     direita = fim;
     esquerda = inicio;
 
     while (esquerda < direita) {
-      while(emOrdem[esquerda]->lucro <= pivo && esquerda <= fim) { esquerda = esquerda + 1; }
-      while(emOrdem[direita]->lucro > pivo && direita > inicio){ direita = direita - 1; }
+      while(emOrdem[esquerda]->lucro > pivo && esquerda <= fim) { esquerda = esquerda + 1; }
+      while(emOrdem[direita]->lucro <= pivo && direita > inicio){ direita = direita - 1; }
       if (esquerda < direita){
         tmp = emOrdem[esquerda];
         emOrdem[esquerda] = emOrdem[direita];
         emOrdem[direita] = tmp;
       }
     }
-    tmp = emOrdem[direita];
-    emOrdem[direita] = emOrdem[inicio];
-    emOrdem[inicio] = tmp;
+    tmp = emOrdem[esquerda];
+    emOrdem[esquerda] = emOrdem[fim];
+    emOrdem[fim] = tmp;
 
-    return direita;
+    return esquerda;
 }
 int randomizedPartition(int inicio, int final){
   int i = (rand() % final + inicio);
