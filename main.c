@@ -24,7 +24,7 @@ void outputFraction();
 /* Ordenar */
 int partition(int inicio, int final);
 int randomizedPartition(int inicio, int final);
-void quickSort(int inicio, int final);
+void quickSort(int inicio, int fim);
 
 int main(){
   
@@ -64,13 +64,13 @@ void outputInput(){
 
   printf("Quantidade de itens: %d\n", n);
   printf("Capacidade da mochila: %d\n", capacidade);
-  for (i = 0; i < n; i++){ 
-    printf("i%d -> V: %d peso:%.1f lucro:%.1f\n", item[i].chave, item[i].valor, item[i].peso, item[i].lucro);
+  for (i = 0; i < n; i++){
+    printf("i%d -> valor:%d peso:%.1f lucro:%.1f\n", item[i].chave, item[i].valor, item[i].peso, item[i].lucro);
   }
   printf("\n");
 
   printf("Em Ordem de Lucro\n");
-  for (i = 0; i < n; i++){ 
+  for (i = 0; i < n; i++){
     printf("i%d %.1f\n", emOrdem[i]->chave, emOrdem[i]->lucro);
   }
   printf("\n");
@@ -137,25 +137,29 @@ void knapsack3(int l){
 */
 
 /*  Quick Sort para ordenar os lucros fracionarios*/
-int partition(int inicio, int final){
-  int i, j;
-  float pivo;
-  itemType *tmp;
+int partition(int inicio, int fim) {
+    int direita, esquerda;
+    float pivo;
+    itemType *tmp;
 
-  i = inicio - 1;
-  pivo = emOrdem[final]->lucro;
-  for (j = inicio; j < final - 1; j++){
-    if (emOrdem[j]->lucro <= pivo){
-      i++;
-      tmp = emOrdem[i];
-      emOrdem[i] = emOrdem[j];
-      emOrdem[j] = tmp;
+    pivo = emOrdem[inicio]->lucro;
+    direita = fim;
+    esquerda = inicio;
+
+    while (esquerda < direita) {
+      while(emOrdem[esquerda]->lucro <= pivo && esquerda <= fim) { esquerda = esquerda + 1; }
+      while(emOrdem[direita]->lucro > pivo && direita > inicio){ direita = direita - 1; }
+      if (esquerda < direita){
+        tmp = emOrdem[esquerda];
+        emOrdem[esquerda] = emOrdem[direita];
+        emOrdem[direita] = tmp;
+      }
     }
-  }
-  tmp = emOrdem[i + 1];
-  emOrdem[i + 1] = emOrdem[final];
-  emOrdem[final] = tmp;
-  return i + 1;
+    tmp = emOrdem[direita];
+    emOrdem[direita] = emOrdem[inicio];
+    emOrdem[inicio] = tmp;
+
+    return direita;
 }
 int randomizedPartition(int inicio, int final){
   int i = (rand() % final + inicio);
@@ -167,10 +171,10 @@ int randomizedPartition(int inicio, int final){
   return partition(inicio,final);
 }
 void quickSort(int inicio, int final){
-  int meio;
+  int pivo;
   if (inicio < final){
-    meio = partition(inicio,final);
-    quickSort(inicio,meio - 1);
-    quickSort(meio + 1,final);
+    pivo = randomizedPartition(inicio,final);
+    quickSort(inicio,pivo - 1);
+    quickSort(pivo + 1,final);
   }
 }
