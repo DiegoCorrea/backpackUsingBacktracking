@@ -90,8 +90,11 @@ void outputFraction(){
   printf("Valor: %.1f\n", lucroMaximoFracionario);
 
   for(i = 0; i < n ; i++){
-    if(item[i].porcao > 0)
+    if(item[i].porcao > 0){
       printf("i%d Porcao:%.2f\n", item[i].chave, item[i].porcao);
+    } else {
+      printf("i%d Nenhuma porção foi pega\n", item[i].chave);
+    }
   }
 }
 /*  Mochila Fracionaria*/
