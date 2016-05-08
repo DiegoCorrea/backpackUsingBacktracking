@@ -13,10 +13,10 @@ typedef struct item{
 
 itemType item[MAX], *emOrdem[MAX];
 
-int capacidade, n, valores[MAX], X[MAX], lucroSomando;
-float pesos[MAX], lucro[MAX], lucroMaximoFracionario;
-int escolhidos[MAX];
+int capacidade, n, lucroSomando;
+float lucroMaximoFracionario = 0.0;
 
+/* Entrada e Saída */
 void input();
 void outputInput();
 void outputFraction();
@@ -26,6 +26,9 @@ int partition(int inicio, int final);
 int randomizedPartition(int inicio, int final);
 void quickSort(int inicio, int fim);
 
+/* Algoritmo da mochila fracionaria */
+int RKnap();
+
 int main(){
   
   input();
@@ -33,7 +36,9 @@ int main(){
   quickSort(0, n-1);
   outputInput();
   
-  //outputFraction();
+  RKnap();
+
+  outputFraction();
 
   return 0;
 }
@@ -53,6 +58,7 @@ void input(){
   for(i = 0; i < n; i++){
     item[i].lucro = item[i].valor/item[i].peso;
     item[i].chave = i+1;
+    item[i].porcao = 0.0;
     emOrdem[i] = &item[i];
   }
 }
@@ -85,31 +91,26 @@ void outputFraction(){
 
   for(i = 0; i < n ; i++){
     if(item[i].porcao > 0)
-      printf("i%d %1.f\n", item[i].chave, item[i].porcao);
+      printf("i%d Porcao:%.2f\n", item[i].chave, item[i].porcao);
   }
 }
 /*  Mochila Fracionaria*/
 int RKnap(){
-  int i = 0, j = 0, profit;
-  float weight;
+  int i = 0, j = 0;
+  float pesoMomentaneo = 0.0;
 
-  for (j = 0; i < n; j++){
-    X[j] = 0;  
-  }
-  while((weight < capacidade) && (i < n)){
-    if (weight + pesos[i] <= capacidade){
-      X[i] = 1;
-      weight = weight + pesos[i];
-      profit = profit + valores[i];
-      i++;
+  for(;(pesoMomentaneo < capacidade) && (i < n); i++){
+    if (pesoMomentaneo + emOrdem[i]->peso <= capacidade){
+      emOrdem[i]->porcao = 1.0;
+      pesoMomentaneo = pesoMomentaneo + emOrdem[i]->peso;
+      lucroMaximoFracionario = lucroMaximoFracionario + emOrdem[i]->valor;
     }else{
-      X[i] = (capacidade - weight)/pesos[i];
-      weight = capacidade;
-      profit = profit + X[i]*valores[i];
-      i++;
+      emOrdem[i]->porcao = (capacidade - pesoMomentaneo)/emOrdem[i]->peso;
+      pesoMomentaneo = capacidade;
+      lucroMaximoFracionario = lucroMaximoFracionario + ((emOrdem[i]->porcao)*(emOrdem[i]->valor));
     }
   }
-  return profit;
+  return lucroMaximoFracionario;
 }
 
 /*
