@@ -15,7 +15,7 @@ typedef struct item{
 
 itemType item[MAX], *emOrdem[MAX];
 
-int capacidade, n, lucroSomando;
+int capacidade, n, lucroSomando, escolhaOtima[MAX];
 float lucroMaximoFracionario = 0.0;
 int lucroMaximoInteiro = 0, C;
 
@@ -126,7 +126,7 @@ void knapsack3(int l, int pesoCorrente){
 
   if((l = n) && (lucroSomando > lucroMaximoInteiro)){
     lucroMaximoInteiro = lucroSomando;
-    //OptX = ;
+    for(i = 0; i < n ; i++) { escolhaOtima[i] = item[i].escolhido; }
   }
 /*
   if (l = n){
