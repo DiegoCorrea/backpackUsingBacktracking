@@ -6,7 +6,9 @@ typedef struct item{
   int chave;
   int valor;
   float peso;
+
   float lucro;
+
   int escolhido;
   float porcao;
 }itemType;
@@ -15,6 +17,7 @@ itemType item[MAX], *emOrdem[MAX];
 
 int capacidade, n, lucroSomando;
 float lucroMaximoFracionario = 0.0;
+int lucroMaximoInteiro = 0, C;
 
 /* Entrada e Saída */
 void input();
@@ -27,7 +30,7 @@ int randomizedPartition(int inicio, int final);
 void quickSort(int inicio, int fim);
 
 /* Algoritmo da mochila fracionaria */
-int RKnap();
+int RKnap(int,int,int);
 
 int main(){
   
@@ -36,7 +39,7 @@ int main(){
   quickSort(0, n-1);
   outputInput();
   
-  RKnap();
+  lucroMaximoFracionario = RKnap(0,0,capacidade);
 
   outputFraction();
 
@@ -59,6 +62,7 @@ void input(){
     item[i].lucro = item[i].valor/item[i].peso;
     item[i].chave = i+1;
     item[i].porcao = 0.0;
+    item[i].escolhido = 0;
     emOrdem[i] = &item[i];
   }
 }
@@ -98,47 +102,49 @@ void outputFraction(){
   }
 }
 /*  Mochila Fracionaria*/
-int RKnap(){
-  int i = 0, j = 0;
-  float pesoMomentaneo = 0.0;
+int RKnap(int i, int j, int capacidadeMomentanea){
+  float pesoMomentaneo = 0.0, lucroMaximo = 0.0;
 
-  for(;(pesoMomentaneo < capacidade) && (i < n); i++){
-    if (pesoMomentaneo + emOrdem[i]->peso <= capacidade){
+  for(;(pesoMomentaneo < capacidadeMomentanea) && (i < n); i++){
+    if (pesoMomentaneo + emOrdem[i]->peso <= capacidadeMomentanea){
       emOrdem[i]->porcao = 1.0;
       pesoMomentaneo = pesoMomentaneo + emOrdem[i]->peso;
-      lucroMaximoFracionario = lucroMaximoFracionario + emOrdem[i]->valor;
+      lucroMaximo = lucroMaximo + emOrdem[i]->valor;
     }else{
-      emOrdem[i]->porcao = (capacidade - pesoMomentaneo)/emOrdem[i]->peso;
-      pesoMomentaneo = capacidade;
-      lucroMaximoFracionario = lucroMaximoFracionario + ((emOrdem[i]->porcao)*(emOrdem[i]->valor));
+      emOrdem[i]->porcao = (capacidadeMomentanea - pesoMomentaneo)/emOrdem[i]->peso;
+      pesoMomentaneo = capacidadeMomentanea;
+      lucroMaximo = lucroMaximo + ((emOrdem[i]->porcao)*(emOrdem[i]->valor));
     }
   }
-  return lucroMaximoFracionario;
+  return lucroMaximo;
 }
 
-/*
-void knapsack3(int l){
 
-  if((l = n) && (lucroSomando > OptP)){
-    OptP = lucroSomando;
+void knapsack3(int l, int pesoCorrente){
+  int i;
+  for(i = 0; i < n ; i++) { lucroSomando = lucroSomando + item[i].lucro*item[i].escolhido; }
+
+  if((l = n) && (lucroSomando > lucroMaximoInteiro)){
+    lucroMaximoInteiro = lucroSomando;
     //OptX = ;
   }
-
+/*
   if (l = n){
     C[l] = 0;
   } else {
-    if (CurW + pesos[l] < capacidade) {
+    if (pesoCorrente + item[l].peso < capacidade) {
       C[l] = 1;      
     } else {
       C[l] = 0;
     }
   }
-  B = lucroSomando + RKnap();
+  B = lucroSomando + RKnap(l,l,capacidade - pesoCorrente);
   for(;;){
     if() return;
   }
-}
 */
+}
+
 
 /*  Quick Sort para ordenar os lucros fracionarios*/
 int partition(int inicio, int fim) {
