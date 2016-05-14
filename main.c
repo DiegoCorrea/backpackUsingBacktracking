@@ -15,7 +15,7 @@ typedef struct item{
 
 itemType item[MAX], *emOrdem[MAX];
 
-int capacidade, n, lucroSomando, escolhaOtima[MAX];
+int capacidade, n, escolhaOtima[MAX];
 float lucroMaximoFracionario = 0.0;
 int lucroMaximoInteiro = 0, C;
 
@@ -121,7 +121,7 @@ int RKnap(int i, int j, int capacidadeMomentanea){
 
 
 void knapsack3(int l, int pesoCorrente){
-  int i;
+  int i, lucroSomando = 0;
   for(i = 0; i < n ; i++) { lucroSomando = lucroSomando + item[i].lucro*item[i].escolhido; }
 
   if((l = n) && (lucroSomando > lucroMaximoInteiro)){
@@ -130,7 +130,7 @@ void knapsack3(int l, int pesoCorrente){
   }
 /*
   if (l = n){
-    C[l] = 0;
+    C[l] = NULL;
   } else {
     if (pesoCorrente + item[l].peso < capacidade) {
       C[l] = 1;      
