@@ -21,7 +21,6 @@ int lucroMaximoInteiro = 0, C[MAX];
 
 /* Entrada e Saída */
 void input();
-void outputInput();
 void outputFraction();
 void outputInteger();
 
@@ -39,15 +38,13 @@ int main(){
   input();
 
   quickSort(0, n-1);
-  outputInput();
   
   lucroMaximoFracionario = RKnap(0,capacidade);
 
   outputFraction();
-  printf("\n");
-  printf("Entrando no Knapsack\n");
+
   knapsack3(0, 0);
-  printf("\n");
+
   outputInteger();
 
   return 0;
@@ -72,25 +69,6 @@ void input(){
     item[i].escolhido = 0;
     emOrdem[i] = &item[i];
   }
-}
-
-void outputInput(){
-  int i;
-
-  printf("Entrada\n");
-
-  printf("Quantidade de itens: %d\n", n);
-  printf("Capacidade da mochila: %d\n", capacidade);
-  for (i = 0; i < n; i++){
-    printf("i%d -> valor:%d peso:%.1f lucro:%.1f\n", item[i].chave, item[i].valor, item[i].peso, item[i].lucro);
-  }
-  printf("\n");
-
-  printf("Em Ordem de Lucro\n");
-  for (i = 0; i < n; i++){
-    printf("i%d %.1f\n", emOrdem[i]->chave, emOrdem[i]->lucro);
-  }
-  printf("\n");
 }
 
 void outputFraction(){
@@ -123,7 +101,8 @@ void outputInteger(){
     }
   }
 }
-/*  Mochila Fracionaria*/
+
+/* Fracionaria Com o vetor original */
 float RKnap(int i, int capacidadeMomentanea){
   float pesoMomentaneo = 0.0, lucroMaximo = 0.0;
 
@@ -141,28 +120,24 @@ float RKnap(int i, int capacidadeMomentanea){
   return lucroMaximo;
 }
 
-
 void knapsack3(int l, int pesoCorrente){
   int i, lucroSomandoAteN = 0, lucroSomandoAteL = 0;
   float limiteSuperior = 0.0;
 
   for(i = 0; i < n ; i++) { 
-    lucroSomandoAteN = lucroSomandoAteN + item[i].valor*escolhaOtima[i];
-    printf("lucroSomandoAteN: %d, ", lucroSomandoAteN);
+    lucroSomandoAteN = lucroSomandoAteN + emOrdem[i]->valor*escolhaOtima[i];
   }
-  printf("\n");
 
   if((l == n) && (lucroSomandoAteN > lucroMaximoInteiro)){
     lucroMaximoInteiro = lucroSomandoAteN;
-    for(i = 0; i < n ; i++) { item[i].escolhido = escolhaOtima[i]; }
+    for(i = 0; i < n ; i++) { emOrdem[i]->escolhido = escolhaOtima[i]; }
   }
 
   if (l == n){
     C[l] = 0;
-    printf("Final, não pode continuar, retornando\n");
     return;
   } else {
-    if (pesoCorrente + item[l].peso <= capacidade) {
+    if (pesoCorrente + emOrdem[l]->peso <= capacidade) {
       C[l] = 1;
     } else {
       C[l] = 0;
@@ -170,26 +145,16 @@ void knapsack3(int l, int pesoCorrente){
   }
 
   for(i = 0; i < l; i++) { 
-    lucroSomandoAteL = lucroSomandoAteL + item[i].valor*escolhaOtima[i];
+    lucroSomandoAteL = lucroSomandoAteL + emOrdem[i]->valor*escolhaOtima[i];
   }
   limiteSuperior = lucroSomandoAteL + RKnap(l,capacidade - pesoCorrente);
 
   for(i = 0; i <= l; i++){
     if( limiteSuperior <= lucroMaximoInteiro) 
       return;
-/*
-    printf("L: %d C[l]: %d ", l, C[l]);
 
-    printf("Limite Superior: %f Lucro Somando Até N: %d\n", limiteSuperior, lucroSomandoAteN);
-
-    if( C[l] == 1 ){
-      printf("Pegou ou não o item\n");
-    } else {
-      printf("NÃO PEGOU O ITEM\n");
-    }
-*/
     escolhaOtima[l] = C[l];
-    knapsack3(l + 1, pesoCorrente + item[l].peso*C[l]);
+    knapsack3(l + 1, pesoCorrente + emOrdem[l]->peso*C[l]);
     if( C[l] == 1 ){
       escolhaOtima[l] = 0;
       C[l] = 0;
