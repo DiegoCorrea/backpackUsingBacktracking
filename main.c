@@ -74,31 +74,22 @@ void input(){
 void outputFraction(){
   int i;
 
-  printf("Resultado francionario\n");
-
-  printf("Valor: %.3f\n", lucroMaximoFracionario);
+  printf("%.1f\n", lucroMaximoFracionario);
 
   for(i = 0; i < n ; i++){
-    if(item[i].porcao > 0){
-      printf("i%d Porcao:%.3f\n", item[i].chave, item[i].porcao);
-    } else {
-      printf("i%d Nenhuma porção foi pega\n", item[i].chave);
-    }
+    if(item[i].porcao > 0)
+      printf("i%d %.1f\n", item[i].chave, item[i].porcao);
+
   }
 }
 void outputInteger(){
   int i;
 
-  printf("Resultado Inteiro\n");
-
-  printf("Valor: %d\n", lucroMaximoInteiro);
+  printf("%d\n", lucroMaximoInteiro);
 
   for(i = 0; i < n ; i++){
-    if(item[i].escolhido != 0){
-      printf("i%d Valor: %d Pego\n", item[i].chave, item[i].valor);
-    } else {
-      printf("i%d Não pego\n", item[i].chave);
-    }
+    if(item[i].escolhido != 0)
+      printf("i%d\n", item[i].chave, item[i].valor);
   }
 }
 
